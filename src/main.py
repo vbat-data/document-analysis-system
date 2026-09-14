@@ -1,5 +1,6 @@
 """FastAPI application entry point."""
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,10 +14,23 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan: runs on startup and shutdown."""
+    # Startup
+    logging.info("Starting %s v%s", settings.app_name, settings.app_version)
+    init_db()
+    yield
+    # Shutdown
+    logging.info("Shutting down %s", settings.app_name)
+
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="AI system for analyzing procurement documents",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -26,13 +40,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-def on_startup() -> None:
-    """Initialize database on startup."""
-    init_db()
-
 
 app.include_router(router)
 
