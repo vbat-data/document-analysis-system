@@ -60,3 +60,46 @@ def test_parse_docx(tmp_path: Path):
     text = parse_document(docx_path)
     assert "Договор" in text
     assert "Ромашка" in text
+def test_extract_regex_dates():
+    """Regex finds dates in common formats."""
+    from src.document_processor import extract_regex_entities
+
+    text = "Договор от 01.01.2024 и доп. соглашение от 15/05/2023"
+    entities = extract_regex_entities(text)
+
+    dates = [e.value for e in entities if e.entity_type == "DATE"]
+    assert "01.01.2024" in dates
+    assert "15/05/2023" in dates
+
+
+def test_extract_regex_money():
+    """Regex finds money amounts."""
+    from src.document_processor import extract_regex_entities
+
+    text = "Сумма договора: 1 500 000 руб. и 5000 рублей предоплата"
+    entities = extract_regex_entities(text)
+
+    money = [e.value for e in entities if e.entity_type == "MONEY"]
+    assert any("1 500 000" in m for m in money)
+    assert any("5000" in m for m in money)
+
+
+def test_analyze_merges_ml_and_regex():
+    """Analyze combines regex entities with ML entities."""
+    from src.document_processor import analyze
+
+    class FakeModel:
+        def extract(self, text: str):
+            return [
+                {"entity_type": "ORG", "value": "ООО Ромашка", "confidence": 0.95},
+            ]
+
+    text = "Договор с ООО Ромашка от 01.01.2024 на сумму 150 000 руб."
+    entities, doc_type, validation, elapsed = analyze(text, FakeModel())
+
+    types = {e.entity_type for e in entities}
+    assert "ORG" in types
+    assert "DATE" in types
+    assert "MONEY" in types
+    assert validation.is_valid is True
+    assert elapsed >= 0
