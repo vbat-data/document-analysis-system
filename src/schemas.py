@@ -56,7 +56,6 @@ class DocumentListItem(BaseModel):
     document_id: str
     filename: str
     document_type: DocumentType
-    status: ProcessingStatus
     created_at: datetime
 
     model_config = {"from_attributes": True}
