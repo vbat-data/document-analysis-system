@@ -32,3 +32,13 @@ data/exports/
 # ML
 models/
 .cache/
+
+# Pytest / coverage artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# SQLite database
+*.db
+*.sqlite3
