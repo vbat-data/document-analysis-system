@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./documents.db"
 
     # ML
-    ner_model: str = "DeepPavlov/rubert-base-cased"
+    ner_model: str = "Davlan/bert-base-multilingual-cased-ner-hrl"
 
     # Files
     max_file_size_mb: int = 50
