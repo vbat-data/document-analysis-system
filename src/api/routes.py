@@ -33,7 +33,7 @@ def health() -> HealthResponse:
     response_model=DocumentAnalysisResponse,
     tags=["documents"],
 )
-async def upload_document(
+def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> DocumentAnalysisResponse:
@@ -45,7 +45,7 @@ async def upload_document(
             detail=f"Unsupported format. Allowed: {sorted(settings.supported_formats)}",
         )
 
-    content = await file.read()
+    content = file.file.read()  # <-- без await, теперь обычный read
     if len(content) > settings.max_file_size_bytes:
         raise HTTPException(
             status_code=413,
