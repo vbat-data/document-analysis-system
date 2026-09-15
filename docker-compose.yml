@@ -1,0 +1,46 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: document-analysis-api:latest
+    container_name: document-analysis-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/raw:/app/data/raw
+      - ./data/exports:/app/data/exports
+      - ./documents.db:/app/documents.db
+    environment:
+      APP_NAME: Document Analysis System
+      APP_VERSION: "0.1.0"
+      DEBUG: "False"
+      DATABASE_URL: sqlite:///./documents.db
+      MAX_FILE_SIZE_MB: "50"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: document-analysis-api:latest
+    container_name: document-analysis-dashboard
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://api:8000
+    command: streamlit run dashboard/app.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped

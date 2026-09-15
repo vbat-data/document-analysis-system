@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Data — не тащим в образ
+data/
+*.db
+*.sqlite3
+documents.db
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ML cache
+.cache/
+models/
+
+# Git
+.git/
+.gitignore
+
+# Docker (сами себя не копируем)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs
+*.md
+!README.md
+
+# OS
+.DS_Store
