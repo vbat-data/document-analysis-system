@@ -217,7 +217,7 @@ document-analysis-system/
 
 - [x] MVP: FastAPI + NER + regex + валидация + тесты + CI
 - [x] Streamlit-дашборд
-- [ ] Docker-контейнеризация
+- [x] Docker-контейнеризация
 - [ ] Fine-tuning NER на доменных данных
 - [ ] OCR для сканированных PDF
 - [ ] Экспорт результатов в Excel
