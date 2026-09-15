@@ -9,7 +9,7 @@ AI-система для автоматического анализа доку�
 ![Streamlit](https://img.shields.io/badge/dashboard-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 ![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
-
+[![Release](https://img.shields.io/github/v/release/vbat-data/document-analysis-system)](https://github.com/vbat-data/document-analysis-system/releases)
 ## ✨ Возможности
 
 - 📥 Загрузка документов форматов **PDF / DOCX / XLSX**
@@ -55,6 +55,41 @@ AI-система для автоматического анализа доку�
 ![Stats](docs/screenshots/stats.png)
 
 ## 🚀 Быстрый старт
+
+## 🐳 Запуск через Docker (рекомендуется)
+
+Одна команда — API и дашборд поднимаются автоматически.
+
+### Требования
+
+- Docker Desktop: https://www.docker.com/products/docker-desktop/
+
+### Запуск
+
+```bash
+git clone https://github.com/vbat-data/document-analysis-system.git
+cd document-analysis-system
+
+mkdir -p data/raw data/exports
+touch documents.db
+docker compose up -d
+```
+
+Готово. Открывайте:
+
+- **API:** http://127.0.0.1:8000/docs
+- **Дашборд:** http://127.0.0.1:8501
+
+Остановить: `docker compose down`.
+
+### Что внутри
+
+- **Multi-stage build** — образ ~700 МБ вместо ~1.5 ГБ
+- **CPU-only PyTorch** — экономия ~600 МБ
+- **Non-root user** — безопасность по best practices
+- **Healthcheck** — Docker сам следит за живостью
+- **Volumes** — данные сохраняются между перезапусками
+
 
 ### Требования
 
